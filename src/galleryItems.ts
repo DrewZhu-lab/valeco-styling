@@ -1,24 +1,15 @@
-import { roomPairs, visibleStyleIndicesByRoom } from './data'
 import { listingPhotoGroups, type ListingPhoto, type ListingRoom } from './listingPhotos'
 import { listingBeforePhotos } from './listingBeforePhotos'
 
 export type GalleryItem = {
   id: string
   kind: ListingPhoto['kind']
-  after: string
-  before?: string
-  styleIndex?: number
+  src: string
+  before: string
+  imageFilter?: string
 }
 
-const originalGroups: Partial<Record<ListingRoom, number[]>> = {
-  living: [...visibleStyleIndicesByRoom[0], ...visibleStyleIndicesByRoom[1]],
-  dining: visibleStyleIndicesByRoom[2],
-  kitchen: visibleStyleIndicesByRoom[3],
-  bedroom: visibleStyleIndicesByRoom[4],
-  entry: visibleStyleIndicesByRoom[5],
-}
-
-// Duplicate -> retained photo. Keep the source catalogue and generated pairs intact.
+// Duplicate -> retained photograph from the supplied source catalogue.
 export const galleryPhotoDuplicates: Readonly<Record<string, string>> = {
   'gallery/living-07.webp': 'gallery/living-02.webp',
   'gallery/dining-10.webp': 'gallery/dining-04.webp',
@@ -35,22 +26,35 @@ export const galleryPhotoDuplicates: Readonly<Record<string, string>> = {
 
 const duplicateListingPhotos = new Set(Object.keys(galleryPhotoDuplicates))
 
+// Apply identical colour grading to both sides without changing scene details.
+const galleryImageFilters: Readonly<Record<string, string>> = {
+  'gallery/living-05.webp': 'sepia(0.12) saturate(1.18) contrast(1.12) brightness(0.99)',
+}
+
 export const galleryGroups = listingPhotoGroups.map(group => ({
   id: group.id,
-  items: [
-    ...(originalGroups[group.id] ?? []).map((styleIndex): GalleryItem => ({
-      id: `concept-${styleIndex}`,
-      kind: styleIndex >= 3 && styleIndex < 6 ? 'lounge' : group.id,
-      ...roomPairs[styleIndex],
-      styleIndex,
-    })),
-    ...group.photos.filter(photo => !duplicateListingPhotos.has(photo.src)).map((photo): GalleryItem => ({
-      id: photo.src,
-      kind: photo.kind,
-      after: `${import.meta.env.BASE_URL}${photo.src}`,
-      before: listingBeforePhotos[photo.src] ? `${import.meta.env.BASE_URL}${listingBeforePhotos[photo.src]}` : undefined,
-    })),
-  ],
+  items: group.photos.filter(photo => !duplicateListingPhotos.has(photo.src)).map((photo): GalleryItem => ({
+    id: photo.src,
+    kind: photo.kind,
+    src: `${import.meta.env.BASE_URL}${photo.src}`,
+    before: `${import.meta.env.BASE_URL}${listingBeforePhotos[photo.src]}`,
+    imageFilter: galleryImageFilters[photo.src],
+  })),
 }))
 
 export const galleryItemCount = galleryGroups.reduce((count, group) => count + group.items.length, 0)
+
+export const galleryPhotoTitle = (room: ListingRoom, index: number) =>
+  `${room.charAt(0).toUpperCase()}${room.slice(1)} ${String(index + 1).padStart(2, '0')}`
+
+const featuredIds = ['living-02', 'living-01', 'dining-01', 'kitchen-02', 'bedroom-03', 'entry-01']
+
+export const featuredGalleryPhotos = featuredIds.map(id => {
+  const group = galleryGroups.find(group => group.items.some(photo => photo.id === `gallery/${id}.webp`))
+  if (!group) throw new Error(`Missing featured photograph: ${id}`)
+  const index = group.items.findIndex(photo => photo.id === `gallery/${id}.webp`)
+  return { ...group.items[index], room: group.id, title: galleryPhotoTitle(group.id, index) }
+})
+
+// Supplied real photograph: listing-photos/living room/lounge 2.jpg.
+export const heroPhoto = `${import.meta.env.BASE_URL}gallery/living-06.webp`

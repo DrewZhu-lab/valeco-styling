@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import PhotoWatermark from './PhotoWatermark'
 
-// 同一房间的空房（before）与布置完成（after）对比滑块。
-export default function BeforeAfter({ before, after, className = '', label = 'Compare before and after styling', loading = 'lazy', watermark = false }: {
+// 同一空间的 Before 效果示意与 After 实拍照片对比滑块。
+export default function BeforeAfter({ before, after, className = '', label = 'Compare before and after styling', loading = 'lazy', watermark = false, imageFilter }: {
   before: string
   after: string
   className?: string
   label?: string
   loading?: 'eager' | 'lazy'
   watermark?: boolean
+  imageFilter?: string
 }) {
   const [pos, setPos] = useState(50)
 
@@ -20,6 +21,7 @@ export default function BeforeAfter({ before, after, className = '', label = 'Co
         loading={loading}
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover filter-none"
+        style={{ filter: imageFilter }}
       />
       <img
         src={before}
@@ -27,7 +29,7 @@ export default function BeforeAfter({ before, after, className = '', label = 'Co
         loading={loading}
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover filter-none"
-        style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
+        style={{ clipPath: `inset(0 ${100 - pos}% 0 0)`, filter: imageFilter }}
       />
 
       <span className="absolute left-4 top-4 rounded-full bg-ink/70 px-3 py-1 text-xs font-medium text-white backdrop-blur">
