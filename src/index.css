@@ -150,3 +150,32 @@ body {
 .animate-fade-up-delay-2 {
   animation: fade-up 0.8s 0.3s ease-out both;
 }
+
+.gallery-arrow {
+  display: flex;
+  height: 44px;
+  width: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--color-oak) 35%, transparent);
+  border-radius: 999px;
+  color: var(--color-ink);
+  transition: background-color 180ms, opacity 180ms;
+}
+
+.gallery-arrow:hover:not(:disabled) {
+  background-color: var(--color-linen);
+}
+
+.gallery-arrow:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.gallery-tabs {
+  scrollbar-width: none;
+}
+
+.gallery-tabs::-webkit-scrollbar {
+  display: none;
+}
