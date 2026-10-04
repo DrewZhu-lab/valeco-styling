@@ -11,9 +11,12 @@ import GalleryPage from './pages/GalleryPage'
 import LocationsPage from './pages/LocationsPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
+import AnalyticsPage from './pages/AnalyticsPage'
+import { trackGooglePage } from './googleAnalytics'
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
+  useEffect(() => { trackGooglePage(pathname, search) }, [pathname, search])
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [pathname])
@@ -35,6 +38,7 @@ export default function App() {
           <Route path="/locations" element={<LocationsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="*" element={<Home />} />
         </Routes>
         <Footer />

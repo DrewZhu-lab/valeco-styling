@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../i18n'
 
 export default function Footer() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const links = [
     { to: '/services', label: t.nav.services },
     { to: '/packages', label: t.nav.packages },
@@ -10,6 +10,7 @@ export default function Footer() {
     { to: '/locations', label: t.nav.locations },
     { to: '/about', label: t.nav.about },
     { to: '/contact', label: t.nav.consult },
+    { to: '/analytics', label: lang === 'zh' || lang === 'zhHant' ? '访问统计与隐私' : 'Analytics & privacy' },
   ]
   return (
     <footer className="bg-ink text-cream/60">
