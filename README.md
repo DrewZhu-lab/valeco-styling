@@ -1,7 +1,7 @@
-# AusRed Styling — marketing site
+# Vale&Co. Styling — marketing site
 
 Property styling / home staging site for Ausred International Investment Group.
-Single-page React app: hero carousel, AI Style Studio, portfolio, services, contact.
+React site with a photographic hero, room gallery, services and contact pages.
 
 ## Stack
 
@@ -17,20 +17,22 @@ npm run build    # type-check + production build → dist/
 
 ## Structure
 
-- `src/data.ts` — all content: hero slides, style previews, projects, services, contact copy
-- `src/components/Hero.tsx` — full-screen crossfade carousel (Ken Burns zoom)
+- `src/data.ts` — address suggestions and location regions
+- `src/listingPhotos.ts` + `src/galleryItems.ts` — supplied photo catalogue, deduplication and featured photos
+- `src/components/Hero.tsx` — full-screen supplied photograph
 - `src/components/AIStudio.tsx` — "enter your address → preview styles" experience
-- `src/components/Portfolio.tsx` + `BeforeAfter.tsx` — stats, drag comparison slider, project grid
+- `src/components/StyleGallery.tsx` + `ListingGallery.tsx` — home previews and seven room gallery pages
 - `src/components/Services.tsx`, `Contact.tsx`, `Footer.tsx`, `Nav.tsx`
 
 ## Current placeholders (to replace before launch)
 
-- **All imagery** is Unsplash stock via hotlink — replace with real AusRed project photos.
-  The before/after slider currently shows one photo with the Before half desaturated
-  in CSS; swap in a real before/after pair (`BeforeAfter` can take two images again).
+- **Gallery imagery** uses the supplied photo catalogue: 68 photos after deduplication.
+  Each supplied After photo retains its reconstructed Before slider. The old AI-only
+  gallery collection and generated hero imagery have been removed. Source details are
+  documented in [`docs/gallery-photo-adjustments.md`](docs/gallery-photo-adjustments.md).
 - **Stats** (280+ homes, 12%, 18 days) are invented — replace with real numbers.
 - **Contact form** has no backend — hook up to email service / API before launch.
-- **Phone number** intentionally omitted until AusRed confirms one.
+- **Phone number** intentionally omitted until Vale&Co. confirms one.
 
 ## AI Style Studio — demo vs production
 
@@ -46,7 +48,7 @@ limiting as a backstop.
 Production path (all pieces are additive, UI stays as-is):
 
 1. **Address input** → Google Places Autocomplete (or Geoscape for AU addresses).
-2. **"Styled homes near you"** → AusRed project database with geocoded past
+2. **"Styled homes near you"** → Vale&Co. project database with geocoded past
    projects; count + styles queried by radius.
 3. **Preview generation** → image-generation API (e.g. Gemini image models or
    Stable Diffusion virtual-staging pipelines) seeded with the property's own

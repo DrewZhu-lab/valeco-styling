@@ -1,11 +1,22 @@
-# Gallery Before / After 素材说明
+# Gallery Before & After 展示说明
 
-新增素材包包含 79 张布置后的实景照片。对应的 79 张 Before 图片由 AI 基于每张 After 照片生成，去除可移动家具与装饰，保留房间结构、固定设施和拍摄视角。这些 Before 是未布置状态的重建效果图，并非现场拍摄的历史照片。
+2026-10-04 根据用户澄清，保留新增素材对应的 Before & After 对比，仅移除旧版本整套 AI 作品和生成的首页视频、海报。首页首屏、六张预览与 Mood Board 继续使用用户提供的照片。
 
-生成原图保存在 `assets/before-generation/`，网页使用的优化 WebP 保存在 `public/gallery-before/`。`assets/before-generation/manifest.json` 记录逐张素材来源与生成文件，`src/listingBeforePhotos.ts` 提供网页对应关系。原始 After 照片继续保留在 `public/listing-photos/`，网页优化版本位于 `public/gallery/`。
+素材目录包含 79 张用户提供的 After 照片及对应的 79 张 Before 效果示意图。Before 最初从 `assets/before-generation/` 的原图存档恢复为 `public/gallery-before/` 中的 WebP，配对关系由 `src/listingBeforePhotos.ts` 记录。这些 Before 是重建的未布置效果示意，并非现场拍摄的原始 Before 照片；After 采用素材包照片。恢复对比展示时没有重新生成；随后按客户反馈修正了下面两张 Before。
 
-新增 79 对与原来的 18 对合并后，经去重保留 86 对展示（68 对新增素材、18 对原有素材）。移除 5 对完全重复照片及 6 对构图高度相似的照片，完整对应表见 `gallery-deduplication.md`。按客厅、餐厅、厨房、卧室、玄关、浴室、户外七个完整区域展示。每次只展示一个区域，顶部区域导航切换对应页面（例如 `#/gallery?room=dining`），支持直接链接与浏览器前进、后退。每个区域采用多排网格：手机一列、中等屏幕两列、大屏三列。每张图片支持 Before / After 拖动比较和放大查看。
+去重后展示 68 组对比。Gallery 保留客厅、餐厅、厨房、卧室、玄关、浴室、户外七个区域，每次只显示一个区域，通过顶部导航切换页面（例如 `#/gallery?room=dining`）。每个区域采用多排网格：手机一列、中等屏幕两列、大屏三列。卡片及放大查看均使用左右拖动的 Before & After 滑块，保留区域名称和编号、淡色水印、上一张与下一张浏览。
 
-After 照片的亮度与清晰度调整见 `gallery-photo-adjustments.md`。
+此前四张经过 AI 调整的 After 照片继续使用已恢复的原始实拍版本，详见 `gallery-photo-adjustments.md`。
 
-网站音乐默认关闭，仅在主动点击音乐按钮后播放。素材更新与文件检查无需打开或刷新浏览器。
+网站音乐默认关闭，仅在主动点击音乐按钮后播放。此次素材恢复和构建检查没有打开或刷新浏览器。
+
+## 2026-10-04 Before 地板复核
+
+逐组对照检查全部 79 组原始素材（包括未展示的重复图），依据实拍中可见的地板材质、铺设方向、拼缝、透视及同一房间其他角度的照片。确认并修正两处：
+
+- **Dining 02**（`dining-02`）：原 Before 把前景餐桌的人字纹桌面误当成了地板。依据 Dining 02 实拍与同房间 Dining 01 的地板，改为暖棕色直铺木板。
+- **Bedroom 06**（底层素材 `bedroom-07`，去重后展示编号为 06）：原 Before 与已恢复的实拍不匹配，使用了地毯和不同窗户。重新以实拍为参照，保留浅灰木纹直铺地板、双扇百叶窗及房间固定结构。
+
+其余 77 张 Before 未发现明确的可见地板材质或铺法错误，保留现有图片；部分照片只露出少量地板，部分厨房和浴室照片没有可见地板。家具遮挡区域仍是根据实拍重建的示意，不能据此确认原先不可见的每一条纹理、拼缝或细节。
+
+两张修正后的 PNG 存档及逐图复核记录在 `assets/before-floor-corrections/2026-10-04/`；生成清单已指向新存档并保留旧存档路径。校验确认全部 79 张 After 文件内容未变，只有上述两张 Before WebP 被替换，所有对比图尺寸仍与对应 After 一致。本次未打开或刷新浏览器。

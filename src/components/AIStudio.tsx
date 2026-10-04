@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MapPin, Sparkles } from 'lucide-react'
-import { addressSuggestions, visibleStyleIndices } from '../data'
+import { addressSuggestions } from '../data'
+import { featuredGalleryPhotos } from '../galleryItems'
+import PhotoWatermark from './PhotoWatermark'
 import { useLang } from '../i18n'
 
 type Phase = 'idle' | 'thinking' | 'done' | 'limit'
 
 const FREE_PREVIEWS = 3
-const USES_KEY = 'ausred-ai-preview-uses'
+const USES_KEY = 'valeco-ai-preview-uses'
 const STEP_MS = 800
 
 // Deterministic pseudo-random "projects styled nearby" count per address (demo).
@@ -151,21 +153,21 @@ export default function AIStudio() {
               <p className="text-sm text-ink/70">{t.ai.nearby(nearbyCount(address), address)}</p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {visibleStyleIndices.map((styleIndex, displayIndex) => {
-                const style = t.styles[styleIndex]
+              {featuredGalleryPhotos.map((photo, displayIndex) => {
                 return (
                   <article
-                    key={style.name}
+                    key={photo.id}
                     className="animate-fade-up overflow-hidden rounded-t-[9rem] rounded-b-2xl bg-linen shadow-sm transition-shadow hover:shadow-md"
                     style={{ animationDelay: `${displayIndex * 0.08}s` }}
                   >
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <img
-                        src={style.img}
-                        alt={`${style.name} styling preview`}
+                        src={photo.src}
+                        alt={photo.title}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                       />
+                      <PhotoWatermark />
                       {displayIndex === 0 && (
                         <span className="absolute bottom-3 left-3 rounded-full bg-brand px-3 py-1 text-xs font-medium text-white">
                           {t.ai.topPick}
@@ -173,18 +175,7 @@ export default function AIStudio() {
                       )}
                     </div>
                     <div className="p-5">
-                      <h3 className="font-display text-xl">{style.name}</h3>
-                      <p className="mt-1.5 text-sm text-ink/65">{style.blurb}</p>
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        {style.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full bg-sand px-2.5 py-1 text-xs text-ink/70"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                      <h3 className="font-display text-xl">{photo.title}</h3>
                     </div>
                   </article>
                 )

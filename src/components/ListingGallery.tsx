@@ -4,12 +4,10 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useLang } from '../i18n'
 import { galleryCopy, type GalleryCopy } from '../galleryCopy'
 import { type ListingRoom } from '../listingPhotos'
-import { galleryItemCount, galleryGroups, type GalleryItem } from '../galleryItems'
+import { galleryItemCount, galleryGroups, galleryPhotoTitle as photoTitle, type GalleryItem } from '../galleryItems'
 import BeforeAfter from './BeforeAfter'
-import PhotoWatermark from './PhotoWatermark'
 
 const number = (index: number) => String(index + 1).padStart(2, '0')
-const photoTitle = (room: ListingRoom, index: number) => `${room.charAt(0).toUpperCase()}${room.slice(1)} ${number(index)}`
 const scrollBehavior = (): ScrollBehavior => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 
 function RoomSection({ id, photos, copy, onOpen }: {
@@ -34,14 +32,7 @@ function RoomSection({ id, photos, copy, onOpen }: {
       <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
         {photos.map((photo, index) => (
           <figure key={photo.id} className="min-w-0">
-            {photo.before ? (
-              <BeforeAfter before={photo.before} after={photo.after} label={`${copy.comparisons}: ${photoTitle(id, index)}`} loading={index < 2 ? 'eager' : 'lazy'} watermark />
-            ) : (
-              <div className="relative overflow-hidden rounded-2xl">
-                <img src={photo.after} alt={photoTitle(id, index)} loading="lazy" decoding="async" className="aspect-[3/2] w-full object-cover filter-none" />
-                <PhotoWatermark />
-              </div>
-            )}
+            <BeforeAfter before={photo.before} after={photo.src} imageFilter={photo.imageFilter} label={`${copy.compare}: ${photoTitle(id, index)}`} loading={index < 2 ? 'eager' : 'lazy'} watermark />
             <figcaption className="mt-3 flex items-center justify-between gap-3 text-sm text-ink/70">
               <p className="min-w-0 tabular-nums">{photoTitle(id, index)}</p>
               <button type="button" onClick={() => onOpen(index)} aria-label={`${copy.open}: ${photoTitle(id, index)}`} className="gallery-arrow shrink-0"><ZoomIn size={18} aria-hidden="true" /></button>
@@ -126,16 +117,7 @@ export default function ListingGallery() {
               <button type="button" onClick={() => dialog.current?.close()} aria-label={copy.close} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-linen/30 hover:bg-linen/10"><X size={23} /></button>
             </div>
             <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
-              {selectedPhoto.before ? (
-                <div className="w-[min(100%,150cqh)] max-w-5xl">
-                  <BeforeAfter key={selectedPhoto.id} before={selectedPhoto.before} after={selectedPhoto.after} label={`${copy.comparisons}: ${photoTitle(selectedGroup.id, selection.index)}`} loading="eager" watermark />
-                </div>
-              ) : (
-                <div className="relative flex h-full min-h-0 max-w-full items-center justify-center">
-                  <img key={selectedPhoto.id} src={selectedPhoto.after} alt={photoTitle(selectedGroup.id, selection.index)} className="h-full min-h-0 max-w-full object-contain filter-none" />
-                  <PhotoWatermark />
-                </div>
-              )}
+              <BeforeAfter key={selectedPhoto.id} before={selectedPhoto.before} after={selectedPhoto.src} imageFilter={selectedPhoto.imageFilter} label={`${copy.compare}: ${photoTitle(selectedGroup.id, selection.index)}`} className="w-[min(100cqw,150cqh)] max-w-6xl shrink-0" loading="eager" watermark />
             </div>
             <div className="mt-4 flex items-center justify-between gap-4">
               <button type="button" onClick={() => movePhoto(-1)} aria-label={copy.previous} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-linen/30 hover:bg-linen/10"><ArrowLeft size={22} /></button>

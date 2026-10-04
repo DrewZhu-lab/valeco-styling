@@ -1,52 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../i18n'
+import { heroPhoto } from '../galleryItems'
+import PhotoWatermark from './PhotoWatermark'
 
 const SLOGAN_LINES = ['Style Spaces.', 'Inspire Living.', 'Elevate Value.']
 
-const BASE = import.meta.env.BASE_URL
-
 export default function Hero() {
   const { t } = useLang()
-  const videoRef = useRef<HTMLVideoElement>(null)
-  // 竖屏/手机加载竖版短片（9:16，人物取景），横屏加载横版
-  const [portrait] = useState(
-    () => window.matchMedia('(max-width: 767px), (orientation: portrait)').matches
-  )
-
-  // 静音视频始终允许自动播放；个别浏览器在资源加载竞态、省电模式或标签页
-  // 由后台转前台时会暂停，这里做三重兜底：挂载即播、回到前台续播、首次点击触发。
-  useEffect(() => {
-    const play = () => videoRef.current?.play().catch(() => {})
-    play()
-    const resume = () => {
-      if (!document.hidden) play()
-    }
-    const tap = () => {
-      play()
-      window.removeEventListener('pointerdown', tap)
-    }
-    document.addEventListener('visibilitychange', resume)
-    window.addEventListener('pointerdown', tap)
-    return () => {
-      document.removeEventListener('visibilitychange', resume)
-      window.removeEventListener('pointerdown', tap)
-    }
-  }, [])
 
   return (
     <section id="top" className="relative h-screen min-h-[560px] overflow-hidden bg-ink">
-      {/* 背景短片：浏览器要求自动播放必须静音，右下角按钮可开启音乐 */}
-      <video
-        ref={videoRef}
-        src={`${BASE}${portrait ? 'hero-m.mp4' : 'hero.mp4'}`}
-        poster={`${BASE}${portrait ? 'hero-poster-m.jpg' : 'hero-poster.jpg'}`}
-        autoPlay
-        muted
-        loop
-        playsInline
+      <img
+        src={heroPhoto}
+        alt="Vale&Co styled living room"
+        fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover"
       />
+      <PhotoWatermark />
       <div className="absolute inset-0 bg-gradient-to-t from-ink/45 via-ink/10 to-ink/5" />
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center text-white">

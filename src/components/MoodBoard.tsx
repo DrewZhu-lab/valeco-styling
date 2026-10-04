@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react'
-import { styleImgs } from '../data'
+import { featuredGalleryPhotos } from '../galleryItems'
+import PhotoWatermark from './PhotoWatermark'
 import { useLang } from '../i18n'
 
 // 品牌色板与材质词保持英文（设计语言，与 slogan 同规则）
@@ -44,18 +45,14 @@ export default function MoodBoard() {
             </p>
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <img
-              src={styleImgs[0]}
-              alt="Style direction"
-              loading="lazy"
-              className="col-span-2 row-span-2 h-full w-full rounded-xl object-cover"
-            />
-            <img
-              src={styleImgs[4]}
-              alt="Texture reference"
-              loading="lazy"
-              className="aspect-square w-full rounded-xl object-cover"
-            />
+            <div className="relative col-span-2 row-span-2 overflow-hidden rounded-xl">
+              <img src={featuredGalleryPhotos[0].src} alt={featuredGalleryPhotos[0].title} loading="lazy" className="h-full w-full object-cover" />
+              <PhotoWatermark />
+            </div>
+            <div className="relative overflow-hidden rounded-xl">
+              <img src={featuredGalleryPhotos[1].src} alt={featuredGalleryPhotos[1].title} loading="lazy" className="aspect-square w-full object-cover" />
+              <PhotoWatermark />
+            </div>
             <div className="grid grid-cols-2 content-center gap-x-1 gap-y-2 rounded-xl bg-cream/70 p-3">
               {SWATCHES.map((s) => (
                 <div key={s.name} className="flex flex-col items-center gap-1">

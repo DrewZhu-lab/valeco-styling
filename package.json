@@ -1,9 +1,9 @@
 {
-  "name": "ausred-styling-site",
+  "name": "valeco-styling-site",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "AusRed Styling — property styling & home staging marketing site.",
+  "description": "Vale&Co. Styling — property styling & home staging marketing site.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
