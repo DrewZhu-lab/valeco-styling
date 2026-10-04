@@ -5,48 +5,20 @@ import { useLang } from '../i18n'
 const BASE = import.meta.env.BASE_URL
 const DEFAULT_VOLUME = 0.18
 
-// 全站背景音乐：每次进入网站默认尝试播放；若浏览器阻止自动播放，
-// 则在用户第一次点击或按键时开始。手动暂停只在本次浏览期间生效。
+// 音乐默认关闭，仅在用户主动点击音乐按钮时播放。
 export default function MusicPlayer() {
   const { t } = useLang()
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [muted, setMuted] = useState(false)
+  const [muted, setMuted] = useState(true)
 
   useEffect(() => {
     const a = audioRef.current
     if (!a) return
     a.volume = DEFAULT_VOLUME
-
-    const removeUnlockListeners = () => {
-      window.removeEventListener('pointerdown', enable)
-      window.removeEventListener('keydown', enableFromKeyboard)
-    }
-
-    const start = async () => {
-      try {
-        await a.play()
-        setMuted(false)
-        removeUnlockListeners()
-      } catch {
-        // The unlock listeners stay active until the browser accepts playback.
-      }
-    }
-
-    const enable = (e: PointerEvent) => {
-      if ((e.target as HTMLElement | null)?.closest('[data-sound-toggle]')) return
-      void start()
-    }
-
-    const enableFromKeyboard = () => {
-      void start()
-    }
-
-    void start()
-    window.addEventListener('pointerdown', enable)
-    window.addEventListener('keydown', enableFromKeyboard)
+    a.pause()
+    setMuted(true)
 
     return () => {
-      removeUnlockListeners()
       a.pause()
     }
   }, [])
@@ -69,7 +41,7 @@ export default function MusicPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} src={`${BASE}hero-music.mp3`} autoPlay loop preload="auto" playsInline />
+      <audio ref={audioRef} src={`${BASE}hero-music.mp3`} loop preload="none" playsInline />
       <button
         data-sound-toggle
         onClick={toggle}
