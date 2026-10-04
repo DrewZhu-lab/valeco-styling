@@ -11,7 +11,7 @@ The site sends manual GA4 page views for its HashRouter routes and the seven kno
 5. Run `npm run build`, obtain approval of the specific release PR, and publish that build through the existing GitHub Pages release process.
 6. Verify an actual homepage visit and a gallery room change in GA Realtime. Local development visits are deliberately excluded.
 
-Account creation is currently awaiting authorization to accept Google's service and data-processing terms. No real measurement ID has been configured yet, and no live collection has been verified.
+The business Google account now has the Vale&Co account and Vale&Co. Styling property, configured with Sydney time and AUD. The Vale&Co. Website stream uses https://valeandco.com.au, stream ID `16039684819`, and measurement ID `G-YYV4TBYRX0`. Enhanced Measurement was disabled during creation. The approved release contains this public measurement ID in `.env.production`. Live collection must be checked after publishing.
 
 ## Collection controls
 
